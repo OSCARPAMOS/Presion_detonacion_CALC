@@ -70,28 +70,42 @@
     
        <div class="container">
         <br>
-        <h1> Hello all!</h1>
+        <h1> Cálculo de la Pressión de Detonación a distancia variable <br> (por tipo de explosivo) </h1> 
         <br>
-    
-        <div class="dropdown">
-         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Selecciona una opción
-         </button>
-         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#"> 1</a>
-          <a class="dropdown-item" href="#">Opción 2</a>
-          <a class="dropdown-item" href="#">Opción 3</a>
-         </div>
+       </div>
+       
+       <!-- Selección de tipo de explosivo -->
+
+       <div class="container">
+        <h4> Introduce el tipo y cantidad de explosivo :</h4>
         
-        </div>
-        
-      
+        <select class="form-select" multiple aria-label="Ejemplo de multiple select">
+            <option selected> Escoje el Explosivo</option>
+            <option value="1"> TNT </option>
+            <option value="2"> RDX </option>
+            <option value="3"> HMX </option>
+            <option value="3"> PNTR </option>
+            <option value="3"> SEMTEX 100 </option>
+        </select>
+      </div>
+      <div class="container"> <br>
+       <label for="basic-url" class="form-label">Cantidad de Explosivo en gramos : </label>
+       <div class="input-group mb-3">
+         <span class="input-group-text" id="basic-addon3"> GRAMOS (g) </span>
+         <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+       </div>
+    </div>
     
     
+
+    <!-- Segunda parte salida de datos-->
     
-    
-    
-    
+    <div class="container"> <br>
+      <label for="customRange1" class="form-label">Ejemplo de rango</label>
+      <input type="range" class="form-range" id="customRange1">
+    </div>
+
+    <br><br><br><br><br>
        <!-- newsletter -->
        <div class="container mb-5">
         <div class="row">

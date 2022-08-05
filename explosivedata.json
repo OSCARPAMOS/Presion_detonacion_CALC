@@ -1,0 +1,17 @@
+[
+    {
+      "nombre": "TNT",
+      "densidad" : "1.2", 
+      "equivalentes TNT": "1"
+    },
+    {
+      "nombre": "RDX",
+      "densidad" : "1.4", 
+      "equivalentes TNT": "1.3"
+    }
+    {
+        "nombre": "Amonal",
+        "densidad" : "1.1", 
+        "equivalentes TNT": "0.9"
+      }
+  ]

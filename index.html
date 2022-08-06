@@ -108,11 +108,37 @@
     
     <!-- Rangos de distancia -->
     <div class="container"> <br>
-      <label for="customRange1" class="form-label">Ejemplo de rango</label>
-      <input type="range" class="form-range" id="customRange1" >
+      
+      
+      <label for="customRange1" class="form-label"> Deliza para cambiar la distancia :  </label>
+      <span id="myValue"></span>
+
+      <input id="myRange" type="range"  id="customRange1" min="1" max="10000" value="5000" step="1" style="width:80%"> <!-- class="form-range"-->
+   
     </div>
+<!-- Intento de mostrar los valores del rango -->
+    <script type="text/javascript" charset="utf-8">
+      var myRange = document.querySelector('#myRange');
+      var myValue = document.querySelector('#myValue');
+      var myUnits = ' (m) Metros';
+      var off = myRange.offsetWidth / (parseInt(myRange.max) - parseInt(myRange.min));
+      var px =  ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetParent.offsetWidth / 2);
+      
+        myValue.parentElement.style.left = px + 'px';
+        myValue.parentElement.style.top = myRange.offsetHeight + 'px';
+        myValue.innerHTML = myRange.value + ' ' + myUnits;
+      
+        myRange.oninput =function(){
+          let px = ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetWidth / 2);
+          myValue.innerHTML = myRange.value + ' ' + myUnits;
+          myValue.parentElement.style.left = px + 'px';
+        };
+    </script>
 
     <!-- Salida datos en Pantalla (al cambiar el rango cambia el valor)-->
+
+
+     <script type="text/javascript" src="./calculosJS.js"></script>
 
 
 

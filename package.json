@@ -1,0 +1,9 @@
+{
+  "name": "explosiv",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": "https://github.com/OSCARPAMOS/Presion_detonacion_CALC.git",
+  "author": "Oscar Pamos <106927863+OSCARPAMOS@users.noreply.github.com>",
+  "license": "MIT"
+}

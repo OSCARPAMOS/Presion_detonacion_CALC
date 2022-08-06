@@ -8,10 +8,10 @@
       "nombre": "RDX",
       "densidad" : "1.4", 
       "equivalentesTNT": "1.3"
-    }
+    },
     {
         "nombre": "Amonal",
         "densidad" : "1.1", 
         "equivalentesTNT": "0.9"
-      }
+    }
   ]

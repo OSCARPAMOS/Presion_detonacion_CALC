@@ -11,6 +11,8 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 
+ 
+    
 </head>
 
 <body>
@@ -79,7 +81,7 @@
        <div class="container">
         <h4> Introduce el tipo y cantidad de explosivo :</h4>
         
-        <select class="form-select" multiple aria-label="Ejemplo de multiple select">
+        <select id="exsel" class="form-select" multiple aria-label="Ejemplo de multiple select">
             <option selected> Escoje el Explosivo</option>
             <option value="1"> TNT </option>
             <option value="2"> RDX </option>
@@ -90,21 +92,18 @@
       </div>
       <div class="container"> <br>
        <label for="basic-url" class="form-label">Cantidad de Explosivo en gramos : </label>
-       <div class="input-group mb-3">
+       <div input-group mb-3">
          <span class="input-group-text" id="basic-addon3"> GRAMOS (g) </span>
-         <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+         <input type="text" class="form-control" id="cantidad" aria-describedby="basic-addon3">
        </div>
     </div>
     
     <!-- Botón de ejecución del algoritmo -->
 
     <div class="container">
-    <button type="submit" class="btn btn-primary" >Ejecutar Simulacro</button>
+    <button id="ejecutar" type="submit" class="btn btn-primary" >Ejecutar Simulacro</button>
     </div>
 
-
-
-    <!-- Segunda parte salida de datos-->
     
     <!-- Rangos de distancia -->
     <div class="container"> <br>
@@ -135,11 +134,72 @@
         };
     </script>
 
+
+
+
+
     <!-- Salida datos en Pantalla (al cambiar el rango cambia el valor)-->
+<script>
+    var ejecutar = document.getElementById("ejecutar");
+
+    ejecutar.addEventListener("click", () => {
+    
+      var tipoexp = document.getElementById('exsel').options[document.getElementById('exsel').selectedIndex].text;
+      var weight = document.getElementById('cantidad').value;
+      var range = document.getElementById ('myRange').value;
+
+      /* Los mismos datos del archivo JSON
+
+         import explosiveData from './explosivedata.json'assert {type: "json"};
+         var b = JSON.parse(JSON.stringify(explosiveData));
+         console.log(b);
+
+      */
+
+      const explosivedata =[{
+      "nombre": "TNT",
+      "densidad" : "1.2", 
+      "equivalentesTNT": "1"
+    },
+    {
+      "nombre": "RDX",
+      "densidad" : "1.4", 
+      "equivalentesTNT": "1.3"
+    },
+    {
+        "nombre": "Amonal",
+        "densidad" : "1.1", 
+        "equivalentesTNT": "0.9"
+    }
+  ]
+    for (let i=0; i <= 2; i++){
+
+      console.log(explosivedata[i].nombre);
+
+      if (explosivedata[i].name == tipoexp) {
+        const densidadf = Number(explosivedata[i].densidad);
+        const equivTNTf = Number(explosivedata[i].equivalentesTNT);
+        
+        break
+      }else{
+        alert ("Datos no encontrados")
+        
+      }
+    }
 
 
-     <script type="text/javascript" src="./calculosJS.js"></script>
+      console.log( range, tipoexp);
+      console.log(weight);
+      
+      
+    });
+    
 
+</script>
+
+
+
+<!-- Final de la salida de los datos-->
 
 
     <br><br><br><br><br>

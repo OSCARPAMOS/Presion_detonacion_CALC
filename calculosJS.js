@@ -6,6 +6,9 @@ range  = form.range.value;
 explosiveDetails = getExplosiveDetails(); // Contrastar lista desplegable con Array de Objetos
 
 
+import explosiveData from './explosivedata.json'; 
+console.log(explosiveData);
+
 
 t = Math.log(getScaledDistance()) / Math.log(10);
 

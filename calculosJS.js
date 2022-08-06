@@ -1,4 +1,4 @@
-// Calculos según NATO AASTP
+/* Calculos según NATO AASTP
 
 weight = form.weight.value;
 range  = form.range.value;
@@ -6,9 +6,15 @@ range  = form.range.value;
 explosiveDetails = getExplosiveDetails(); // Contrastar lista desplegable con Array de Objetos
 
 
-import explosiveData from './explosivedata.json'; 
-console.log(explosiveData);
+/* Importing the JSON file and then converting it to a string. */
+import explosiveData from './explosivedata.json'assert {type: "json"};
+var b = JSON.parse(JSON.stringify(explosiveData));
+console.log(b);
 
+
+
+
+/*
 
 t = Math.log(getScaledDistance()) / Math.log(10);
 
@@ -102,4 +108,4 @@ function calculateShockFrontVelocity(t) {
     return sv;
 }
 
-
+*/

@@ -140,6 +140,31 @@
     <!-- Salida datos en Pantalla (al cambiar el rango cambia el valor)-->
 
     <div  id="answers" class="container">
+<br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th id="fila1titulo" scope="col"></th>
+            <th id="fila2titulo" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+           
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+           
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
       <!--  
 
       <table id="answerTable" class="table table-striped">
@@ -209,18 +234,20 @@
         break
       }*/
 
-      return densidadf, equivTNTf
-
     };
 
     
-
-      console.log( densidadf, equivTNTf);
-      console.log( range, tipoexp);
-      console.log( weight );
+      console.log( "Explosivo seleccionado : " + tipoexp);
+      console.log( "Datos explosivo seleccionado: densidad" + densidadf +" equivalentes TNT: "+ equivTNTf);
+      console.log( "Distancia :  " + range);
+      console.log( "Peso : " + weight );
      
-      var t = Math.pow(equivTNTf,0.3333333) ;
+      var t = Math.pow((equivTNTf*range)/weight,0.3333333) ;
       var t2 = Math.log(t)/Math.log(10);
+
+      calculateIncidentPressure(t2);
+      calculateTimeOfArrival(t2);
+      calculateShockFrontVelocity (t2);
       console.log (t, t2);
 
       // Presión Máxima 
@@ -238,12 +265,14 @@ function calculateIncidentPressure(t){ //NATO AASTP version
         0.0001456723382 * Math.pow(U,10) +
         0.00167847752266 * Math.pow(U,11);
     ip = Math.pow(10,ip);
+    ip = ip.toFixed(3);
     return ip;
 };
 
+
 // Tiempo para llegada Onda de choque
 function calculateTimeOfArrival(t) {
-    cubeRootOfChargeWeight = Math.pow(getChargeWeight("impulse"),0.3333333);
+    cubeRootOfChargeWeight = Math.pow((equivTNTf*range)/weight,0.3333333);
     U = -0.202425716178 + 1.37784223635 * t;
     toa = -0.0591634288046 + 1.35706496258 * U +
         0.052492798645 * Math.pow(U,2) -
@@ -256,6 +285,7 @@ function calculateTimeOfArrival(t) {
         0.00147752067524 * Math.pow(U,9);
     toa = Math.pow(10,toa);
     toa = toa * cubeRootOfChargeWeight;
+    toa = toa.toFixed(3);
     return toa;
 }
 
@@ -278,14 +308,31 @@ function calculateShockFrontVelocity(t) {
         0.000693180974 * Math.pow(U,13) +
         0.0003847494916 * Math.pow(U,14);
     sv = Math.pow(10,sv) * 1000;
+    sv = sv.toFixed(3);
     return sv;
 }
-      
-document.getElementById("answers").insertAdjacentHTML("sv",
-"<h3>This is the text which has been inserted by JS</h3>");
+  
+console.log ("presion incidente: " + ip);
+console.log ("Tiempo de llegada: " + toa);
+console.log ("Velocidad de la Onda de choque : " + sv);
+
+var escribir =document.getElementById("fila1titulo");
+escribir.innerHTML = "Presión máxima kPa : " ;
+
+var escribir2= document.getElementById("fila2titulo");
+escribir2.innerHTML = sv;
 
 
 
+/*
+let div = document.createElement('div');
+div.id = 'content';
+div.className = 'container';
+div.innerHTML = '<br><p>CreateElement example</p>';
+document.getElementById("answers").appendChild(div);
+
+
+*/
 
 
       

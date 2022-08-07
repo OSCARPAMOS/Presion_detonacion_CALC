@@ -98,21 +98,16 @@
        </div>
     </div>
     
-    <!-- Botón de ejecución del algoritmo -->
-
-    <div class="container">
-    <button id="ejecutar" type="submit" class="btn btn-primary" >Ejecutar Simulacro</button>
-    </div>
-
-    
+        
     <!-- Rangos de distancia -->
     <div class="container"> <br>
       
       
-      <label for="customRange1" class="form-label"> Deliza para cambiar la distancia :  </label>
+      <label for="customRange1" class="form-label"> Desliza para cambiar la distancia :  </label>
+
       <span id="myValue"></span>
 
-      <input id="myRange" type="range"  id="customRange1" min="1" max="10000" value="5000" step="1" style="width:80%"> <!-- class="form-range"-->
+      <input id="myRange" type="range"  id="customRange1" min="1" max="100" value="50" step="0.1" style="width:80%"> <!-- class="form-range"-->
    
     </div>
 <!-- Intento de mostrar los valores del rango -->
@@ -134,12 +129,36 @@
         };
     </script>
 
-
+<!-- Botón de ejecución del algoritmo -->
+<br>
+<div class="container">
+  <button id="ejecutar" type="submit" class="btn btn-primary" >Ejecutar Simulacro</button>
+</div>
 
 
 
     <!-- Salida datos en Pantalla (al cambiar el rango cambia el valor)-->
+
+    <div  id="answers" class="container">
+      <!--  
+
+      <table id="answerTable" class="table table-striped">
+        <tr>
+          <td style="width:40%;">Peso en TNT para presión (kg):</td>
+          <td id="tntPressure" class="answer" style="width:10%;"></td>
+          <td style="width:40%;">Peso en TNT para impulso (kg):</td>
+          <td id="tntImpulse"  class="answer" style="width:10%;"></td>
+        </tr>
+        </table>
+
+        -->
+    </div>
+
+
+
+
 <script>
+
     var ejecutar = document.getElementById("ejecutar");
 
     ejecutar.addEventListener("click", () => {
@@ -171,26 +190,104 @@
         "densidad" : "1.1", 
         "equivalentesTNT": "0.9"
     }
-  ]
-    for (let i=0; i <= 2; i++){
+  ];
 
-      console.log(explosivedata[i].nombre);
+  var densidadf = 0;
+  var equivTNTf = 0;
 
-      if (explosivedata[i].name == tipoexp) {
-        const densidadf = Number(explosivedata[i].densidad);
-        const equivTNTf = Number(explosivedata[i].equivalentesTNT);
-        
+    for (let i=0; i <= explosivedata.length; i++){
+
+
+      if (explosivedata[i].nombre == tipoexp) {
+        densidadf = Number(explosivedata[i].densidad);
+        equivTNTf = Number(explosivedata[i].equivalentesTNT);
+       
         break
-      }else{
-        alert ("Datos no encontrados")
-        
-      }
-    }
-
-
-      console.log( range, tipoexp);
-      console.log(weight);
       
+      } /*else{
+        alert ("Datos no encontrados, elija un explosivo")
+        break
+      }*/
+
+      return densidadf, equivTNTf
+
+    };
+
+    
+
+      console.log( densidadf, equivTNTf);
+      console.log( range, tipoexp);
+      console.log( weight );
+     
+      var t = Math.pow(equivTNTf,0.3333333) ;
+      var t2 = Math.log(t)/Math.log(10);
+      console.log (t, t2);
+
+      // Presión Máxima 
+function calculateIncidentPressure(t){ //NATO AASTP version
+    U = -0.214362789151 + 1.35034249993 * t;
+    ip = 2.78076916577 - 1.6958988741 * U -
+        0.154159376846 * Math.pow(U,2) +
+        0.514060730593 * Math.pow(U,3) +
+        0.0988534365274 * Math.pow(U,4) -
+        0.293912623038 * Math.pow(U,5) -
+        0.0268112345019 * Math.pow(U,6) +
+        0.109097496421 * Math.pow(U,7) +
+        0.00162846756311 * Math.pow(U,8) -
+        0.0214631030242 * Math.pow(U,9) +
+        0.0001456723382 * Math.pow(U,10) +
+        0.00167847752266 * Math.pow(U,11);
+    ip = Math.pow(10,ip);
+    return ip;
+};
+
+// Tiempo para llegada Onda de choque
+function calculateTimeOfArrival(t) {
+    cubeRootOfChargeWeight = Math.pow(getChargeWeight("impulse"),0.3333333);
+    U = -0.202425716178 + 1.37784223635 * t;
+    toa = -0.0591634288046 + 1.35706496258 * U +
+        0.052492798645 * Math.pow(U,2) -
+        0.196563954086 * Math.pow(U,3) -
+        0.0601770052288 * Math.pow(U,4) +
+        0.0696360270891 * Math.pow(U,5) +
+        0.0215297490092 * Math.pow(U,6) -
+        0.0161658930785 * Math.pow(U,7) -
+        0.00232531970294 * Math.pow(U,8) +
+        0.00147752067524 * Math.pow(U,9);
+    toa = Math.pow(10,toa);
+    toa = toa * cubeRootOfChargeWeight;
+    return toa;
+}
+
+//Velocidad de la Onda expansiva
+
+function calculateShockFrontVelocity(t) {
+    U = -0.202425716178 + 1.37784223635 * t;
+    sv = -0.06621072854 - 0.698029762594 * U +
+        0.158916781906 * Math.pow(U,2) +
+        0.443812098136 * Math.pow(U,3) -
+        0.113402023921 * Math.pow(U,4) -
+        0.369887075049 * Math.pow(U,5) +
+        0.129230567449 * Math.pow(U,6) +
+        0.19857981197 * Math.pow(U,7) -
+        0.0867636217397 * Math.pow(U,8) -
+        0.0620391900135 * Math.pow(U,9) +
+        0.0307482926566 * Math.pow(U,10) +
+        0.0102657234407 * Math.pow(U,11) -
+        0.00546533250772 * Math.pow(U,12) -
+        0.000693180974 * Math.pow(U,13) +
+        0.0003847494916 * Math.pow(U,14);
+    sv = Math.pow(10,sv) * 1000;
+    return sv;
+}
+      
+document.getElementById("answers").insertAdjacentHTML("sv",
+"<h3>This is the text which has been inserted by JS</h3>");
+
+
+
+
+
       
     });
     

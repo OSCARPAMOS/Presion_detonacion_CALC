@@ -82,8 +82,8 @@
         <h4> Introduce el tipo y cantidad de explosivo :</h4>
         
         <select id="exsel" class="form-select" multiple aria-label="Ejemplo de multiple select">
-            <option selected> Escoje el Explosivo</option>
-            <option value="1"> TNT </option>
+            <option> Escoje el Explosivo</option>
+            <option value="1" selected> TNT </option>
             <option value="2"> RDX </option>
             <option value="3"> HMX </option>
             <option value="3"> PNTR </option>
@@ -139,32 +139,19 @@
 
     <!-- Salida datos en Pantalla (al cambiar el rango cambia el valor)-->
 
-    <div  id="answers" class="container">
-<br>
-      <table class="table">
-        <thead>
-          <tr>
-            <th id="fila1titulo" scope="col"></th>
-            <th id="fila2titulo" scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-           
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-           
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+    <div  id="answers" class="container ">
+     <br>
+    <div id ="datos1" class="container strong"></div>
+     <br>
+    <div id ="datos2" class="container"></div>
+     <br>
+    <div id ="datos3" class="container"></div>
+     <br>
+    <div  class="container">
+      <h6 id ="datos4"></h6>
+    </div>
+
+    
       <!--  
 
       <table id="answerTable" class="table table-striped">
@@ -312,17 +299,79 @@ function calculateShockFrontVelocity(t) {
     return sv;
 }
   
-console.log ("presion incidente: " + ip);
-console.log ("Tiempo de llegada: " + toa);
-console.log ("Velocidad de la Onda de choque : " + sv);
+// Ejecución de la funcion de calculo
+calculos();
 
-var escribir =document.getElementById("fila1titulo");
-escribir.innerHTML = "Presión máxima kPa : " ;
+/*
+var escribir =document.getElementById("datos1");
+escribir.innerHTML = "Presión máxima kPa : " + ip + " kPa";
 
-var escribir2= document.getElementById("fila2titulo");
-escribir2.innerHTML = sv;
+var escribir2= document.getElementById("datos2");
+escribir2.innerHTML = "Tiempo de llegada de la onda de choque (ms) " + toa + " ms";
+
+var escribir3= document.getElementById("datos3");
+escribir3.innerHTML = "Velocidad de la onda de choque (m/s) " + sv + " m/s";
+
+*/
+
+// Cambio de rango nuevos valores:
+
+var cambiodist = document.querySelector("#myRange");
+
+cambiodist.addEventListener("change", () => {
+calculos ();
+
+} );
 
 
+
+function calculos(){
+
+      nuevorango = document.getElementById("myRange").value;
+      var t = Math.pow((equivTNTf*nuevorango)/weight,0.3333333) ;
+      var t2 = Math.log(t)/Math.log(10);
+
+      calculateIncidentPressure(t2);
+      calculateTimeOfArrival(t2);
+      calculateShockFrontVelocity (t2);
+      console.log (t, t2);
+
+      var escribir =document.getElementById("datos1");
+      escribir.innerHTML = "Presión máxima kPa : <b>" + ip + " kPa </b>";
+
+      var escribir2= document.getElementById("datos2");
+      escribir2.innerHTML = "Tiempo de llegada de la onda de choque (ms): <b>" + toa + " ms </b>";
+
+      var escribir3= document.getElementById("datos3");
+      escribir3.innerHTML = "Velocidad de la onda de choque (m/s): <b>" + sv + " m/s </b>";
+
+      var escribir4= document.getElementById("datos4");
+      escribir4.innerHTML = "Mueve el valor del Rango de Distancia para ver nuevos resultados !";
+
+      let div = document.createElement('div');
+       div.id = 'content';
+       div.className = 'container';
+       div.innerHTML = '<br><br><br><div class="mx-auto" style="width: 200px;"><button id="ejgrafico" type="submit" class="btn btn-primary" align-item="center">Ver Grafico P(t) a la distancia seleccionada</button></div><div class="container" id="gcanvas"></div>';
+       document.getElementById("datos4").appendChild(div);
+      
+
+      var grafico = document.getElementById("ejgrafico");
+
+       grafico.addEventListener("click", () => {
+       
+      let divcanv = document.createElement('div');
+       divcanv.id = 'content';
+       divcanv.className = 'container';
+       divcanv.innerHTML = '<br><br><br><canvas id="myCanvas" width="650" height="250" style="border:1px solid #000000;"></canvas>';
+       document.getElementById("gcanvas").appendChild(divcanv);
+
+       graficocanvas();
+
+       });
+
+      
+
+};
 
 /*
 let div = document.createElement('div');
@@ -335,6 +384,19 @@ document.getElementById("answers").appendChild(div);
 */
 
 
+//función API Canvas
+
+
+function graficocanvas(){
+console.log("funciona canvas");
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.moveTo(0, 0);
+ctx.lineTo(500, 100);
+ctx.stroke();
+
+};
       
     });
     

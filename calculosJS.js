@@ -220,9 +220,28 @@ console.log("funciona canvas");
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
+/*
 ctx.moveTo(100, 0);
 ctx.lineTo(100, 100);
 ctx.stroke();
+*/
+
+var interval = 0.01;
+
+for (x = 0; x < 640; x = x + interval) {
+    var y= x*0.2;
+    var x1 = x + interval;
+    var y1 = y + interval*0.2;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.closePath();
+
+}
+
+
+
 
 };
       

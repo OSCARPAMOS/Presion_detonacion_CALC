@@ -51,12 +51,12 @@
     
             </ul>
            </div>
-    
+    <!--
            <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
            </form>
-    
+          -->
           </div>
     
     
@@ -169,15 +169,21 @@
 
 
 
-<script>
+<script type="text/javascript" src="./calculosJS.js">
+  /*
 
     var ejecutar = document.getElementById("ejecutar");
 
     ejecutar.addEventListener("click", () => {
     
       var tipoexp = document.getElementById('exsel').options[document.getElementById('exsel').selectedIndex].text;
-      var weight = document.getElementById('cantidad').value;
+      var weight = document.getElementById('cantidad').value/1000;
       var range = document.getElementById ('myRange').value;
+
+      if (weight <= 0){
+        alert("La cantidad debe de ser positiva y mayor a 0");
+        return false
+      };
 
       /* Los mismos datos del archivo JSON
 
@@ -185,7 +191,7 @@
          var b = JSON.parse(JSON.stringify(explosiveData));
          console.log(b);
 
-      */
+      
 
       const explosivedata =[{
       "nombre": "TNT",
@@ -219,7 +225,7 @@
       } /*else{
         alert ("Datos no encontrados, elija un explosivo")
         break
-      }*/
+      }
 
     };
 
@@ -312,7 +318,7 @@ escribir2.innerHTML = "Tiempo de llegada de la onda de choque (ms) " + toa + " m
 var escribir3= document.getElementById("datos3");
 escribir3.innerHTML = "Velocidad de la onda de choque (m/s) " + sv + " m/s";
 
-*/
+
 
 // Cambio de rango nuevos valores:
 
@@ -381,7 +387,7 @@ div.innerHTML = '<br><p>CreateElement example</p>';
 document.getElementById("answers").appendChild(div);
 
 
-*/
+
 
 
 //función API Canvas
@@ -392,15 +398,15 @@ console.log("funciona canvas");
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-ctx.moveTo(0, 0);
-ctx.lineTo(500, 100);
+ctx.moveTo(100, 0);
+ctx.lineTo(100, 100);
 ctx.stroke();
 
 };
       
     });
     
-
+*/
 </script>
 
 

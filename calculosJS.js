@@ -1,57 +1,98 @@
-/* Calculos según NATO AASTP
-
-weight = form.weight.value;
-range  = form.range.value;
-
-explosiveDetails = getExplosiveDetails(); // Contrastar lista desplegable con Array de Objetos
 
 
-/* Importing the JSON file and then converting it to a string. */
+/* Importing the JSON file and then converting it to a string. 
 import explosiveData from './explosivedata.json'assert {type: "json"};
 var b = JSON.parse(JSON.stringify(explosiveData));
 console.log(b);
 
+*/
 
+var ejecutar = document.getElementById("ejecutar");
 
+ //Los mismos datos del archivo JSON
+const explosivedata =[{
+    "nombre": "TNT",
+    "densidad" : "1.2", 
+    "equivalentesTNT": "1"
+  },
+  {
+    "nombre": "RDX",
+    "densidad" : "1.4", 
+    "equivalentesTNT": "1.3"
+  },
+  {
+      "nombre": "Amonal",
+      "densidad" : "1.1", 
+      "equivalentesTNT": "0.9"
+  }
+];
 
-/*
+var densidadf = 0;
+var equivTNTf = 0;
 
-t = Math.log(getScaledDistance()) / Math.log(10);
+    ejecutar.addEventListener("click", () => {
+    
+      var tipoexp = document.getElementById('exsel').options[document.getElementById('exsel').selectedIndex].text;
+      var weight = document.getElementById('cantidad').value/1000;
+      var range = document.getElementById ('myRange').value;
 
-function getScaledDistance(){
-    var cubeRootOfChargeWeight = Math.pow(getChargeWeight(),0.3333333);
-    return form.range.value / cubeRootOfChargeWeight;
-}
+       if (weight <= 0){
+        alert("La cantidad debe de ser positiva y mayor a 0");
+        return false
+       };  
 
-function getChargeWeight(equivType){
-    if(typeof(equivType)==='undefined'){
-        equivType = "pressure";
-    }
-    var weight = form.weight.value;
-    var tntEquiv = getExplosiveDetails().peakPressureTNTEquiv;
-    if (equivType === "impulse"){
-        tntEquiv = getExplosiveDetails().impulseTNTEquiv;
-    }
-    return weight * tntEquiv;
-}
+       for (let i=0; i <= explosivedata.length; i++){
 
-function getExplosiveDetails(){
-    var option = form.explosiveType.options[form.explosiveType.selectedIndex].value;
-    return explosiveTable[option];
-}
+         if (explosivedata[i].nombre == tipoexp) {
+          densidadf = Number(explosivedata[i].densidad);
+         equivTNTf = Number(explosivedata[i].equivalentesTNT);
+       
+        break
+      
+        } /*else{
+        alert ("Datos no encontrados, elija un explosivo")
+        break
+        }*/
 
-// SELECTOR DE tipo de explosivo (lista desplegable)
+        };
+    
+      console.log( "Explosivo seleccionado : " + tipoexp);
+      console.log( "Datos explosivo seleccionado: densidad" + densidadf +" equivalentes TNT: "+ equivTNTf);
+      console.log( "Distancia :  " + range);
+      console.log( "Peso : " + weight );
+     
+      var t = Math.pow((equivTNTf*range)/weight,0.3333333) ;
+      var t2 = Math.log(t)/Math.log(10);
 
-var explosiveTable = getExplosiveTable();
-                        for (explosive in explosiveTable) {
-                            selected = (explosive == "tnt") ? "selected" : "";
-                            name = explosiveTable[explosive].name;
-                            document.write('<option value="' + explosive + '" ' + selected + ' >' + name + '</option>');
-                        }
+      calculateIncidentPressure(t2);
+      calculateTimeOfArrival(t2);
+      calculateShockFrontVelocity (t2);
+      console.log (t, t2);
 
+            // Ejecución de la funcion de calculo
+      calculos();
 
-// Presión Máxima 
-function calculateIncidentPressure(t){ //NATO AASTP version
+           /*
+           var escribir =document.getElementById("datos1");
+           escribir.innerHTML = "Presión máxima kPa : " + ip + " kPa";
+
+            var escribir2= document.getElementById("datos2");
+            escribir2.innerHTML = "Tiempo de llegada de la onda de choque (ms) " + toa + " ms";
+
+            var escribir3= document.getElementById("datos3");
+            escribir3.innerHTML = "Velocidad de la onda de choque (m/s) " + sv + " m/s";
+
+            */
+
+            
+       var cambiodist = document.querySelector("#myRange");
+
+       cambiodist.addEventListener("change", () => {
+       calculos ();
+       } );
+
+        // Presión Máxima 
+        function calculateIncidentPressure(t){ //NATO AASTP version
     U = -0.214362789151 + 1.35034249993 * t;
     ip = 2.78076916577 - 1.6958988741 * U -
         0.154159376846 * Math.pow(U,2) +
@@ -65,12 +106,14 @@ function calculateIncidentPressure(t){ //NATO AASTP version
         0.0001456723382 * Math.pow(U,10) +
         0.00167847752266 * Math.pow(U,11);
     ip = Math.pow(10,ip);
+    ip = ip.toFixed(3);
     return ip;
-}
+        };
 
-// Tiempo para llegada Onda de choque
-function calculateTimeOfArrival(t) {
-    cubeRootOfChargeWeight = Math.pow(getChargeWeight("impulse"),0.3333333);
+
+        // Tiempo para llegada Onda de choque
+        function calculateTimeOfArrival(t) {
+    cubeRootOfChargeWeight = Math.pow((equivTNTf*range)/weight,0.3333333);
     U = -0.202425716178 + 1.37784223635 * t;
     toa = -0.0591634288046 + 1.35706496258 * U +
         0.052492798645 * Math.pow(U,2) -
@@ -83,12 +126,13 @@ function calculateTimeOfArrival(t) {
         0.00147752067524 * Math.pow(U,9);
     toa = Math.pow(10,toa);
     toa = toa * cubeRootOfChargeWeight;
+    toa = toa.toFixed(3);
     return toa;
-}
+         }
 
-//Velocidad de la Onda expansiva
+         //Velocidad de la Onda expansiva
 
-function calculateShockFrontVelocity(t) {
+        function calculateShockFrontVelocity(t) {
     U = -0.202425716178 + 1.37784223635 * t;
     sv = -0.06621072854 - 0.698029762594 * U +
         0.158916781906 * Math.pow(U,2) +
@@ -105,7 +149,82 @@ function calculateShockFrontVelocity(t) {
         0.000693180974 * Math.pow(U,13) +
         0.0003847494916 * Math.pow(U,14);
     sv = Math.pow(10,sv) * 1000;
+    sv = sv.toFixed(3);
     return sv;
-}
+        }
+
+        function calculos(){
+
+      nuevorango = document.getElementById("myRange").value;
+      var t = Math.pow((equivTNTf*nuevorango)/weight,0.3333333) ;
+      var t2 = Math.log(t)/Math.log(10);
+
+      calculateIncidentPressure(t2);
+      calculateTimeOfArrival(t2);
+      calculateShockFrontVelocity (t2);
+      console.log (t, t2);
+
+      var escribir =document.getElementById("datos1");
+      escribir.innerHTML = "Presión máxima kPa : <b>" + ip + " kPa </b>";
+
+      var escribir2= document.getElementById("datos2");
+      escribir2.innerHTML = "Tiempo de llegada de la onda de choque (ms): <b>" + toa + " ms </b>";
+
+      var escribir3= document.getElementById("datos3");
+      escribir3.innerHTML = "Velocidad de la onda de choque (m/s): <b>" + sv + " m/s </b>";
+
+      var escribir4= document.getElementById("datos4");
+      escribir4.innerHTML = "Mueve el valor del Rango de Distancia para ver nuevos resultados !";
+
+      let div = document.createElement('div');
+       div.id = 'content';
+       div.className = 'container';
+       div.innerHTML = '<br><br><br><div class="mx-auto" style="width: 200px;"><button id="ejgrafico" type="submit" class="btn btn-primary" align-item="center">Ver Grafico P(t) a la distancia seleccionada</button></div><div class="container" id="gcanvas"></div>';
+       document.getElementById("datos4").appendChild(div);
+      
+
+      var grafico = document.getElementById("ejgrafico");
+
+       grafico.addEventListener("click", () => {
+       
+      let divcanv = document.createElement('div');
+       divcanv.id = 'content';
+       divcanv.className = 'container';
+       divcanv.innerHTML = '<br><br><br><canvas id="myCanvas" width="650" height="250" style="border:1px solid #000000;"></canvas>';
+       document.getElementById("gcanvas").appendChild(divcanv);
+
+       graficocanvas();
+
+       });
+
+      
+
+        };
+
+/*
+let div = document.createElement('div');
+div.id = 'content';
+div.className = 'container';
+div.innerHTML = '<br><p>CreateElement example</p>';
+document.getElementById("answers").appendChild(div);
+
 
 */
+
+
+//función API Canvas
+
+
+function graficocanvas(){
+console.log("funciona canvas");
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.moveTo(100, 0);
+ctx.lineTo(100, 100);
+ctx.stroke();
+
+};
+      
+    });
+    
